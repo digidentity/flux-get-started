@@ -6,6 +6,7 @@ metadata:
     k8s-app: auth_box
     version: ed38bfcf2ce1e0b7b336716a839523882bbc1c4b
   name: authbox
+  namespace: staging
 spec:
   replicas: 1
   selector:
