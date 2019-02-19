@@ -1,0 +1,220 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    component: rails
+    k8s-app: auth_box
+    version: ed38bfcf2ce1e0b7b336716a839523882bbc1c4b
+  name: authbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: rails
+      k8s-app: auth_box
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        component: rails
+        k8s-app: auth_box
+        version: ed38bfcf2ce1e0b7b336716a839523882bbc1c4b
+    spec:
+      containers:
+      - args:
+        - run_with_migration
+        command:
+        - /home/app/bin/entry
+        env:
+        - name: RAILS_ENV
+          valueFrom:
+            configMapKeyRef:
+              key: railsenv
+              name: ddyparams
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              key: appenv
+              name: ddyparams
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              key: sentrydsn
+              name: authbox
+        - name: ASSETS_CDN_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              key: assetscdnenabled
+              name: ddyparams
+        - name: RAILS_SERVE_STATIC_FILES
+          value: "true"
+        - name: RAILS_RELATIVE_URL_ROOT
+          value: /
+        - name: BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: baseurl
+              name: ddyparams
+        - name: BASE_FQDN
+          valueFrom:
+            configMapKeyRef:
+              key: basefqdn
+              name: ddyparams
+        - name: AUDIT_LOGGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: auditloggerurl
+              name: ddyparams
+        - name: AUTH_BOX_URL
+          valueFrom:
+            configMapKeyRef:
+              key: authboxurl
+              name: ddyparams
+        - name: AUTHORIZATION_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: authorizationmanagerurl
+              name: ddyparams
+        - name: BACKOFFICE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: backofficeurl
+              name: ddyparams
+        - name: CAUTH_BOX_URL
+          valueFrom:
+            configMapKeyRef:
+              key: cauthboxurl
+              name: ddyparams
+        - name: COMPANY_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: companymanagerurl
+              name: ddyparams
+        - name: ESIGN2_URL
+          valueFrom:
+            configMapKeyRef:
+              key: esign2url
+              name: ddyparams
+        - name: EVIDENCE_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: evidencemanagerurl
+              name: ddyparams
+        - name: GATEWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              key: gatewayurl
+              name: ddyparams
+        - name: INVOICE_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: invoicemanagerurl
+              name: ddyparams
+        - name: MY_DIGIDENTITY_URL
+          valueFrom:
+            configMapKeyRef:
+              key: mydigidentityurl
+              name: ddyparams
+        - name: PROFILE_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: profilemanagerurl
+              name: ddyparams
+        - name: SMART_CARD_MANAGER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: smartcardmanagerurl
+              name: ddyparams
+        - name: LOG_OUTPUT
+          value: lograge
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: loglevel
+              name: ddyparams
+        - name: DATABASE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: databaseusername
+              name: authbox
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: databasename
+              name: authbox
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: authbox
+              name: postgres
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              key: redisurl
+              name: authbox
+        - name: REDIS_NAMESPACE
+          value: auth_box
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              key: secretkeybase
+              name: authbox
+        - name: ANALYTICS_HTML
+          valueFrom:
+            secretKeyRef:
+              key: analyticshtml
+              name: authbox
+        - name: POSTGRESQL_SERVICE_HOST
+          value: postgresql-rds
+        - name: QR_CODE_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              key: qrcodeprefix
+              name: ddyparams
+        - name: ALLOWED_AUTHENTICATORS
+          valueFrom:
+            configMapKeyRef:
+              key: allowedauthenticators
+              name: ddyparams
+        image: quay.io/digidentity/auth_box:ed38bfcf2ce1e0b7b336716a839523882bbc1c4b
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /check/live
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: authbox
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /check
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1536Mi
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: quay
