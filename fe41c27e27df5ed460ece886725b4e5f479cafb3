@@ -1,0 +1,1 @@
+{"jobID":"860a76ec-9289-f467-3d00-e997eb211345","spec":{"type":"policy","cause":{"Message":"","User":"Ops DDY \u003cops@digidentity.com\u003e"},"spec":{"demo:helmrelease/mongodb":{"add":{"automated":"true"},"remove":null}}},"result":null}
