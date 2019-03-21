@@ -1,0 +1,1 @@
+{"jobID":"2c09f888-7614-ff64-c453-c7ae9454ebc5","spec":{"type":"policy","cause":{"Message":"","User":"Ops DDY \u003cops@digidentity.com\u003e"},"spec":{"demo:deployment/podinfo":{"add":null,"remove":{"automated":"true"}}}},"result":null}
