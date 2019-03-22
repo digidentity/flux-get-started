@@ -1,0 +1,1 @@
+{"jobID":"e66d94ee-d242-e634-56a3-db152c6e24b9","spec":{"type":"policy","cause":{"Message":"","User":"Ops DDY \u003cops@digidentity.com\u003e"},"spec":{"demo:deployment/pgclient":{"add":{"automated":"true"},"remove":null}}},"result":null}
