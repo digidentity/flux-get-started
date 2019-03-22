@@ -29,7 +29,7 @@ spec:
         run: pgclient
     spec:
       containers:
-      - image: postgres:9.5-alpine
+      - image: postgres:9.4-alpine
         imagePullPolicy: IfNotPresent
         name: pgclient
         resources: {}
