@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   annotations:
     deployment.kubernetes.io/revision: "1"
+    flux.weave.works/automated: 'true'
   creationTimestamp:
   generation: 1
   labels:
